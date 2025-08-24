@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BHUDEV Network Charitable Foundation</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
+      border: 4px solid #FF6600;
+      padding: 20mm;
+      background: url('back2.jpeg') no-repeat center center;
+      background-size: cover;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        margin: 0;
+        border: none;
+        width: 210mm;
+        height: 297mm;
+        padding: 20mm;
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .main-logo {
+      max-width: 300px;
+      margin-bottom: 15px;
+    }
+
+    .sub-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .sub-logos img {
+      height: 40px;
+    }
+
+    .candidate-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: 0 auto 30px auto;
+      width: 100%;
+      align-items: center;
+    }
+
+    .candidate-photo {
+      width: 170px;
+      height: 220px;
+      border: 4px solid #1976D2;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+    }
+
+    .candidate-info {
+      width: 97%;
+      max-width: 999px;
+      margin: 0;
+      text-align: left;
+    }
+
+    .info-field {
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .info-field label {
+      font-weight: bold;
+      color: navy;
+      font-size: 18px;
+    }
+
+    /* Footer Section Styles */
+    .footer-section {
+      margin-top: 30px; /* reduced from 91px */
+      width: 100%;
+    }
+
+    .footer-websites {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .website-link {
+      color: #0066cc;
+      font-weight: bold;
+      font-size: 22px;
+      margin: 2px 0;
+      text-decoration: underline;
+      display: block;
+    }
+
+    .footer-container {
+      display: flex;
+      width: 100%;  /* keep inside the border */
+      margin: 0 auto;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .office-box {
+      flex: 1;
+      padding: 15px 20px;
+      color: white;
+      font-size: 13px;
+      line-height: 1.4;
+      position: relative;
+    }
+
+    .vadodara-office {
+      background-color: #2B2B6B;
+    }
+
+    .amdavad-office {
+      background-color: #d61977;
+    }
+
+    .office-header {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 8px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    .office-header hr {
+      border: none;
+      border-top: 2px solid white;
+      margin: 8px 0 12px 0;
+      width: 100%;
+    }
+
+    .office-details {
+      font-size: 13px;
+      text-align: left;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <div class="header">
+      <img class="main-logo" src="img1.png" alt="Main Header Logo">
+      <div class="sub-logos">
+        <img src="img2.png" alt="Left Logo">
+        <img src="img3.png" alt="Center Logo">
+        <img src="img4.jpg" alt="Right Logo">
+        <img src="imp5.png" alt="Right Logo">
+      </div>
+    </div>
+
+    <div class="candidate-section">
+      <div class="candidate-photo">
+        <!-- Candidate photo here -->
+      </div>
+      <div class="candidate-info">
+        <div class="info-field">
+          <label>Name of Candidate:</label>
+          <input type="text" placeholder="Enter candidate name"
+            style="font-weight:bold;flex:1;border:none;background:transparent;font-size:20px;color:#ff1f8f;outline:none;">
+        </div>
+        <div class="info-field">
+          <label>Date Of Birth:</label>
+          <input type="text" placeholder="Enter date of birth"
+            style="font-weight:bold;flex:1;border:none;background:transparent;font-size:20px;color:#ff1f8f;outline:none;">
+        </div>
+        <div class="info-field">
+          <label>Membership ID:</label>
+          <input type="text" placeholder="Enter membership ID"
+            style="font-weight:bold;flex:1;border:none;background:transparent;font-size:20px;color:#ff1f8f;outline:none;">
+        </div>
+        <div class="info-field">
+          <label>Website Name:</label>
+          <input type="text" placeholder="Enter website name"
+            style="font-weight:bold;flex:1;border:none;background:transparent;font-size:20px;color:#ff1f8f;outline:none;">
+        </div>
+        <div class="info-field">
+          <label>Mobile Number:</label>
+          <input type="tel" placeholder="Enter mobile number"
+            style="font-weight:bold;flex:1;border:none;background:transparent;font-size:20px;color:#ff1f8f;outline:none;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer-section">
+      <div class="footer-websites">
+        <div class="website-link">www.BhudevNetwork.com</div>
+        <div class="website-link">www.BhudevNetworkVivah.com</div>
+      </div>
+
+      <div class="footer-container">
+        <div class="office-box vadodara-office">
+          <div class="office-header">
+            AMDAVAD (Branch Office)
+            <hr>
+          </div>
+          <div class="office-details">
+            A-703, 7th Floor, Nar - Narayan Complex, Near Swastik<br>
+            Char Rasta, Opp. Side of Navrangpura Post office,<br>
+            Navrangpura, Amdavad - 380009.
+          </div>
+        </div>
+
+        <div class="office-box amdavad-office">
+          <div class="office-header">
+            AMDAVAD (Branch Office)
+            <hr>
+          </div>
+          <div class="office-details">
+            6th Floor, 601,602,603,604(a), Galaxy Chambers,<br>
+            Dairy Den, Circle Sayajigunj, Vadodara - 390020
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>
