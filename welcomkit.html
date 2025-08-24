@@ -9,15 +9,15 @@
         :root {
             --footerTopSpace: 0px;
             /* reduce extra top padding in footer */
-            --footerOrnamentMB: -11px;
+            --footerOrnamentMB: 3px;
             /* tighter space below ornament */
-            --footerLogosToLinks: 6px;
+            --footerLogosToLinks: 11px;
             /* tighter space between logos and links */
             --footerWebsitesMB: 2px;
             /* tighter space above office boxes */
             --footerOfficePadTop: 8px;
             /* reduced office box top padding */
-            --footerOfficePadBottom: 0px;
+            --footerOfficePadBottom: 8px;
             --footerOrnamentWidth: 500px;
             /* control ornament width only */
             /* reduced office box bottom padding */
@@ -34,7 +34,12 @@
             width: 210mm;
             height: 297mm;
             margin: 0 auto;
-            border: 4px solid #FF6600;
+            /* Draw two inner rings so the blue appears outside the orange, both inside the page bounds */
+            border: none;
+            box-shadow: inset 0 0 0 8px #FF6600,
+                /* inner orange ring */
+                inset 0 0 0 4px #1976D2;
+            /* outer blue ring */
             padding: 20mm 20mm 0 20mm;
             background: url('back2.jpeg') no-repeat center center;
             background-size: cover;
@@ -53,6 +58,8 @@
             .container {
                 margin: 0;
                 border: none;
+                box-shadow: inset 0 0 0 8px #FF6600,
+                    inset 0 0 0 4px #1976D2;
                 width: 210mm;
                 height: 297mm;
                 padding: 20mm 20mm 0 20mm;
@@ -290,7 +297,7 @@
 
         /* Footer row is RTL, so the leftmost box is the last child */
         .footer-container .office-box:last-child {
-            padding-left: 36px;
+            padding-left: 28px;
             /* nudge a bit more so it clears the border */
         }
 
@@ -571,52 +578,6 @@
 
 
 
-    <!-- Page 2 (Back side) -->
-    <div class="container page-break" id="page2">
-        <div class="p2-wrapper">
-            <div class="header">
-                <img id="mainLogo" class="main-logo" src="img1.png"
-                    alt="Main Header Logo"><!-- Set main header logo URL here -->
-                <div class="sub-logos">
-                    <img id="subLogoLeft" src="img2.png" alt="Left Logo"><!-- Left sub-logo URL -->
-                    <img id="subLogoCenter" src="img3.png" alt="Center Logo"><!-- Center sub-logo URL -->
-                    <img id="subLogoRight1" src="img4.jpg" alt="Right Logo 1"><!-- Right sub-logo 1 URL -->
-                    <img id="subLogoRight2" src="imp5.png" alt="Right Logo 2"><!-- Right sub-logo 2 URL -->
-                </div>
-            </div>
-
-            <div class="p2-panel">
-                <div class="p2-title">Welcome to Bhudev Network Family</div>
-                <table class="p2-table" aria-label="Candidate details">
-                    <thead>
-                        <tr>
-                            <th colspan="2">Candidate Name : <span id="p2CandidateName">—</span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="key">Member ID:</td>
-                            <td class="val"><span id="p2MembershipId">—</span></td>
-                        </tr>
-                        <tr>
-                            <td class="key">Website:</td>
-                            <td class="val"><a id="p2Website" class="p2-link" href="#" target="_blank">—</a></td>
-                        </tr>
-                        <tr>
-                            <td class="key">Mobile:</td>
-                            <td class="val"><span id="p2Mobile">—</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="p2-panel p2-note">
-                <ul>
-                    <li>Please read backside for policies, terms and conditions, and the scope of services covered under
-                        your membership.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
 
     <!-- Face detection + auto-crop scripts -->
     <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
