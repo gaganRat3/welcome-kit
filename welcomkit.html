@@ -34,12 +34,12 @@
             width: 210mm;
             height: 297mm;
             margin: 0 auto;
-            /* Draw two inner rings so the blue appears outside the orange, both inside the page bounds */
+            /* Inner orange ring + true outer blue border */
             border: none;
+            /* orange inside */
             box-shadow: inset 0 0 0 8px #FF6600,
-                /* inner orange ring */
-                inset 0 0 0 4px #1976D2;
-            /* outer blue ring */
+                /* blue outside the element */
+                0 0 0 4px #1976D2;
             padding: 20mm 20mm 0 20mm;
             background: url('back2.jpeg') no-repeat center center;
             background-size: cover;
@@ -59,7 +59,7 @@
                 margin: 0;
                 border: none;
                 box-shadow: inset 0 0 0 8px #FF6600,
-                    inset 0 0 0 4px #1976D2;
+                    0 0 0 4px #1976D2;
                 width: 210mm;
                 height: 297mm;
                 padding: 20mm 20mm 0 20mm;
@@ -206,12 +206,12 @@
         /* Footer Section Styles */
         .footer-section {
             position: absolute;
-            bottom: 0;
-            left: 0;
+            bottom: 7px;
+            left: 8px;
             /* anchor to inner left border */
             right: auto;
             /* avoid shrink-to-fit */
-            width: 100%;
+            width: 98%;
             /* span full inner width */
             padding-top: var(--footerTopSpace);
             /* adjustable height: increase/decrease this */
