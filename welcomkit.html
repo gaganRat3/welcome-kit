@@ -37,9 +37,9 @@
             /* Two inset rings so both show in print/PDF: blue outside, orange inside */
             border: none;
             box-shadow:
-                inset 0 0 0 5px #1976D2,
+                inset 0 0 0 7px #0c4986,
                 /* OUTER blue band (closest to edge) */
-                inset 0 0 0 14px #FF6600;
+                inset 0 0 0 16px #FF6600;
             /* inner orange band */
             padding: 20mm 20mm 0 20mm;
             background: url('back2.jpeg') no-repeat center center;
@@ -59,14 +59,19 @@
             .container {
                 margin: 0;
                 border: none;
-                box-shadow:
-                    inset 0 0 0 12px #1976D2,
-                    /* OUTER blue */
-                    inset 0 0 0 6px #FF6600;
-                /* inner orange */
+                box-shadow: none;
+                /* reset; we apply specific rings below */
                 width: 210mm;
                 height: 297mm;
                 padding: 20mm 20mm 0 20mm;
+            }
+
+            /* Page 1: solid blue outer ring + orange inner ring */
+            .container:not(#page2) {
+                border: 14px solid #1976D2;
+                /* blue ring */
+                box-shadow: inset 0 0 0 12px #FF6600;
+                /* orange inner ring */
             }
 
             @page {
@@ -210,12 +215,12 @@
         /* Footer Section Styles */
         .footer-section {
             position: absolute;
-            bottom: 7px;
-            left: 8px;
+            bottom: 14px;
+            left: 14px;
             /* anchor to inner left border */
             right: auto;
             /* avoid shrink-to-fit */
-            width: 98%;
+            width: 766px;
             /* span full inner width */
             padding-top: var(--footerTopSpace);
             /* adjustable height: increase/decrease this */
@@ -278,6 +283,18 @@
             display: flex;
             width: 100%;
             margin-left: 0;
+            margin-right: 0;
+            padding: 0;
+            box-sizing: border-box;
+            direction: rtl;
+            /* start from right */
+            gap: 0;
+        }
+
+        .footer-container1 {
+            display: flex;
+            width: 87%;
+            margin-left: 43px;
             margin-right: 0;
             padding: 0;
             box-sizing: border-box;
@@ -373,6 +390,25 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
         }
 
+        .zoom-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 6px;
+        }
+
+        .zoom-wrap label {
+            font-size: 12px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .zoom-wrap input[type="range"] {
+            width: 120px;
+        }
+
         .top-actions .download-btn {
             position: static;
         }
@@ -415,6 +451,7 @@
         .p2-title {
             text-align: center;
             font-weight: bold;
+
             margin: 6px 0;
         }
 
@@ -455,6 +492,31 @@
 
         .p2-note ul {
             margin: 6px 0 0 18px;
+        }
+
+        /* Keep Login ID / Account Manager / Password on one line and evenly spaced */
+        .info-table td {
+            white-space: nowrap;
+            display: grid;
+            grid-template-columns: 220px auto;
+            /* fixed label column, flexible value column */
+            align-items: center;
+            justify-items: start;
+            /* ensure values start at column start */
+            width: 100%;
+            column-gap: 6px;
+            /* consistent gap after colon */
+        }
+
+        .info-table strong {
+            justify-self: end;
+            /* right-align label so colon lines up */
+            margin-right: 0;
+        }
+
+        /* Remove left padding in value inputs so text starts right after the colon */
+        .info-table .p2-inline-input {
+            padding-left: 0 !important;
         }
 
         /* Screen-only paging: show one container at a time, but render all for PDF */
@@ -499,6 +561,12 @@
         <button id="prevPageBtn" class="download-btn" type="button">Prev Page</button>
         <button id="nextPageBtn" class="download-btn" type="button">Next Page</button>
         <button id="uploadPhotoButtonTop" class="upload-btn-top" type="button">Upload Photo</button>
+        <div class="zoom-wrap">
+            <label for="zoomSlider">Zoom</label>
+            <input id="zoomSlider" type="range" min="0.8" max="2" step="0.05" value="1">
+        </div>
+        <button id="pastePhotoButton" class="upload-btn-top" type="button">Paste Photo</button>
+        <button id="copyPhotoButton" class="upload-btn-top" type="button">Copy Photo</button>
     </div>
 
 
@@ -626,89 +694,113 @@
             </div>
         </div>
 
-        <div class="p2-wrapper" style="margin: 0 6mm;">
-            <div class="welcome-text" style="text-align:center;">
-                <p>Welcome to Bhudev Network Family,</p>
-                <p>Thank You for Choosing Bhudev Network for Searching your Life partner.</p>
+
+        <div style="padding-top:23px;">
+            <p>Welcome to Bhudev Network Family,</p>
+            <p>Thank You for Choosing Bhudev Network for Searching your Life partner.</p>
+        </div>
+
+        <div class="hide-on-pdf" style="text-align: right; margin-bottom: 10px;">
+            <button id="addRowBtn"
+                style="background: #1976D2; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">Add
+                Row</button>
+            <button id="deleteRowBtn"
+                style="background: #d61977; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">Delete
+                Row</button>
+        </div>
+
+        <table class="content-table" id="mainTable" style="width:100%; border-collapse: collapse; margin-bottom: 12px;">
+            <thead>
+                <tr>
+                    <th colspan="2" style="text-align:center; border:1px solid #000; padding:8px; font-size:21px;">
+                        <span style="display:inline-flex; align-items:baseline; gap:8px;">
+                            <label>Candidate Name :</label>
+                            <input type="text" placeholder="Enter candidate name"
+                                style="font-weight:bold;flex:1;border:none;background:transparent;font-size:20px;color:#000000;outline:none;">
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align:center; border:1px solid #000; padding:8px;">
+                        <strong>Member ID:</strong><br>
+                        <input id="p2MembershipId" type="text" placeholder="Enter membership ID"
+                            style="border:0; padding:4px; width:90%; text-align:center;  font-size: 23px; ;">
+                    </td>
+                    <td style="text-align:center; border:1px solid #000; padding:8px;">
+                        <strong>Website:</strong><br>
+                        <span id="p2WebsiteWrap" class="hl-wrap"
+                            style="position:relative; display:inline-block; vertical-align:baseline;">
+                            <span id="p2WebsiteHL" class="hl-bg" aria-hidden="true"
+                                style="position:absolute; left:50%; top:50%; transform:translate(-50%, -50%); background:#ffeb3b; padding:0 2px; white-space:pre; pointer-events:none; display:none; line-height:inherit; color:transparent;"></span>
+                            <input id="p2Website" class="p2-inline-input highlight hl-input" type="text"
+                                placeholder="Enter website name"
+                                style="border:0; padding:0 2px; width:1ch; font-size: 23px; line-height:1.2; background:transparent; position:relative; z-index:1; text-align:center; outline:none;">
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="info-table" style="width:625px; border-collapse:collapse;">
+            <tr>
+                <td style="text-align:center; border:1px solid #000; padding:8px; font-size:20px;">
+                    <strong>Login ID :</strong>
+                    <input id="p2LoginId" class="p2-inline-input link-like" type="text" placeholder="email@example.com"
+                        style="border:0; padding:0 6px; width:auto; font-size:20px; color:#1976D2; ">
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:center; border:1px solid #000; padding:8px; font-size:20px;">
+                    <strong>Account Manager :</strong>
+                    <span id="p2AccountManagerWrap" class="hl-wrap"
+                        style="position:relative; display:inline-block; vertical-align:baseline;">
+                        <span id="p2AccountManagerHL" class="hl-bg" aria-hidden="true"
+                            style="position:absolute; left:0; top:50%; transform:translateY(-50%); background:#ffeb3b; padding:0 2px; white-space:pre; pointer-events:none; display:none; line-height:inherit; color:transparent;"></span>
+                        <input id="p2AccountManager" class="p2-inline-input highlight hl-input hl-fixed" type="text"
+                            placeholder="Name"
+                            style="border:0; padding:0; width:220px; font-size:20px; line-height:1.2; background:transparent; position:relative; z-index:1; outline:none;">
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:center; border:1px solid #000; padding:8px; font-size:20px;">
+                    <strong>Password :</strong>
+                    <input id="p2Password" class="p2-inline-input" type="text" value="123456789" readonly
+                        aria-readonly="true" style="border:0; padding:0 6px; width:auto; font-size:20px;">
+                </td>
+            </tr>
+        </table>
+        <div style="padding-top:23px;">
+            <ul>
+                <li>Please Read Backside For Policies, Terms and Conditions and Scope of Services Covered under
+                    Your Membership</li>
+            </ul>
+        </div>
+
+        <div class="footer-section" style="position:absolute; left:8px; right:8px; bottom:8px;">
+            <div class="footer-note">
             </div>
-
-            <div class="hide-on-pdf" style="text-align: right; margin-bottom: 10px;">
-                <button id="addRowBtn"
-                    style="background: #1976D2; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">Add
-                    Row</button>
-                <button id="deleteRowBtn"
-                    style="background: #d61977; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">Delete
-                    Row</button>
-            </div>
-
-            <table class="content-table" id="mainTable"
-                style="width:100%; border-collapse: collapse; margin-bottom: 12px;">
-                <thead>
-                    <tr>
-                        <th colspan="2" style="text-align:center; border:1px solid #000; padding:8px;">
-                            Candidate Name :
-                            <input id="p2CandidateName" type="text" placeholder="Enter candidate name"
-                                style="border:0; padding:4px; width:60%; text-align:center; font-weight:bold;">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="text-align:center; border:1px solid #000; padding:8px;">
-                            <strong>Member ID:</strong><br>
-                            <input id="p2MembershipId" type="text" placeholder="Enter membership ID"
-                                style="border:0; padding:4px; width:90%; text-align:center;">
-                        </td>
-                        <td style="text-align:center; border:1px solid #000; padding:8px;">
-                            <strong>Website:</strong><br>
-                            <input id="p2Website" type="text" placeholder="Enter website name"
-                                style="border:0; padding:4px; width:90%; text-align:center;">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table class="info-table" style="width:100%;">
-                <tr>
-                    <td class="label" style="width:160px; font-weight:bold;">Login ID :</td>
-                    <td><input type="text" value="" style="border: 1px solid #ccc; padding: 4px; width: 90%;"></td>
-                </tr>
-                <tr>
-                    <td class="label" style="font-weight:bold;">Account Manager :</td>
-                    <td><input type="text" value="" style="border: 1px solid #ccc; padding: 4px; width: 90%;"></td>
-                </tr>
-                <tr>
-                    <td class="label" style="font-weight:bold;">Password :</td>
-                    <td><input type="text" value="" style="border: 1px solid #ccc; padding: 4px; width: 90%;"></td>
-                </tr>
-
-            </table>
-
-            <div class="footer-section" style="position:absolute; left:8px; right:8px; bottom:8px;">
-                <div class="footer-note">
-                    <ul>
-                        <li>Please Read Backside For Policies, Terms and Conditions and Scope of Services Covered under
-                            Your Membership</li>
-                    </ul>
-                </div>
-                <div class="footer-container" style="display:flex; gap:12px;">
-                    <div class="office-box vadodara-office" style="flex:1;">
-                        <div class="office-header">VADODARA
-                            <hr>
-                        </div>
-                        <div class="office-details">603, Galav Chambers, Dairy Den Circle, Sayajigunj Vadodara-390020
-                        </div>
+            <div class="footer-container1" style="display:flex; gap:12px;">
+                <div class="office-box amdavad-office" style="flex:1; background: #1976D2;">
+                    <div class="office-header">AMDAVAD
+                        <hr>
                     </div>
-                    <div class="office-box amdavad-office" style="flex:1;">
-                        <div class="office-header">AMDAVAD
-                            <hr>
-                        </div>
-                        <div class="office-details">A-703, 7th Floor, Nar-Naryana Complex, Opp Jalaram Chhaswala, Nr.
-                            Navrangpura Post office, Amdavad-380009</div>
+                    <div class="office-details">A-703, 7th Floor, Nar-Naryana Complex, Opp Jalaram Chhaswala, Nr.
+                        Navrangpura Post office, Amdavad-380009</div>
+                </div>
+                <div class="office-box vadodara-office" style="flex:1; background: #1976D2;">
+                    <div class="office-header">VADODARA
+                        <hr>
+                    </div>
+                    <div class="office-details">603, Galav Chambers, Dairy Den Circle, Sayajigunj Vadodara-390020
                     </div>
                 </div>
+
             </div>
         </div>
+    </div>
     </div>
 
 
@@ -728,6 +820,9 @@
         const uploadBtnTop = document.getElementById('uploadPhotoButtonTop');
         const previewImg = document.getElementById('candidatePhotoPreview');
         const modelStatus = document.getElementById('modelStatus');
+        const zoomSlider = document.getElementById('zoomSlider');
+        const pastePhotoButton = document.getElementById('pastePhotoButton');
+        const copyPhotoButton = document.getElementById('copyPhotoButton');
 
         const TARGET_W = 170; // px (matches CSS)
         const TARGET_H = 220; // px (matches CSS)
@@ -761,7 +856,11 @@
 
         function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
 
-        function computeCropRect(imgW, imgH, faceBox) {
+        let zoomFactor = 1.0;
+        let lastImage = null;
+        let lastFaceBox = null;
+
+        function computeCropRect(imgW, imgH, faceBox, zoom = 1.0) {
             // Add padding around the face, then enforce target aspect ratio, and keep inside image bounds.
             const pad = 0.35; // 35% padding around face box
             let cx, cy, w, h;
@@ -794,6 +893,10 @@
                 w = h * TARGET_ASPECT;
             }
 
+            // Apply zoom by reducing crop size (zoom > 1 => zoom in)
+            w = w / zoom;
+            h = h / zoom;
+
             // Convert center-based to top-left and clamp inside image
             let x = cx - w / 2;
             let y = cy - h / 2;
@@ -805,6 +908,23 @@
             if (y + h > imgH) y = imgH - h;
 
             return { x: Math.max(0, x), y: Math.max(0, y), w: Math.min(w, imgW), h: Math.min(h, imgH) };
+        }
+
+        function renderCrop(img, faceBox) {
+            const crop = computeCropRect(img.width, img.height, faceBox, zoomFactor);
+            const canvas = document.createElement('canvas');
+            canvas.width = TARGET_W;
+            canvas.height = TARGET_H;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(
+                img,
+                crop.x, crop.y, crop.w, crop.h,
+                0, 0, TARGET_W, TARGET_H
+            );
+            previewImg.src = canvas.toDataURL('image/jpeg', 0.92);
+            previewImg.style.display = 'block';
         }
 
         async function handleFile(file) {
@@ -827,22 +947,9 @@
                             console.warn('Face detection error:', err);
                         }
                     }
-
-                    const crop = computeCropRect(img.width, img.height, faceBox);
-                    const canvas = document.createElement('canvas');
-                    canvas.width = TARGET_W;
-                    canvas.height = TARGET_H;
-                    const ctx = canvas.getContext('2d');
-                    ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = 'high';
-                    ctx.drawImage(
-                        img,
-                        crop.x, crop.y, crop.w, crop.h,
-                        0, 0, TARGET_W, TARGET_H
-                    );
-
-                    previewImg.src = canvas.toDataURL('image/jpeg', 0.92);
-                    previewImg.style.display = 'block';
+                    lastImage = img;
+                    lastFaceBox = faceBox;
+                    renderCrop(img, faceBox);
                 };
                 img.src = e.target.result;
             };
@@ -852,6 +959,64 @@
         uploadBtn?.addEventListener('click', () => photoInput?.click());
         uploadBtnTop?.addEventListener('click', () => photoInput?.click());
         photoInput?.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+        // Zoom control
+        zoomSlider?.addEventListener('input', () => {
+            const val = parseFloat(zoomSlider.value);
+            zoomFactor = isFinite(val) ? val : 1.0;
+            if (lastImage) renderCrop(lastImage, lastFaceBox);
+        });
+
+        // Paste from clipboard: use paste event for broad support
+        window.addEventListener('paste', (e) => {
+            const items = e.clipboardData?.items || [];
+            for (const item of items) {
+                if (item.type.startsWith('image/')) {
+                    const file = item.getAsFile();
+                    if (file) { handleFile(file); e.preventDefault(); return; }
+                }
+            }
+            const files = e.clipboardData?.files || [];
+            if (files.length) { handleFile(files[0]); e.preventDefault(); }
+        });
+
+        // Optional: attempt programmatic clipboard read (may require HTTPS)
+        pastePhotoButton?.addEventListener('click', async () => {
+            try {
+                if (navigator.clipboard && navigator.clipboard.read) {
+                    const items = await navigator.clipboard.read();
+                    for (const ci of items) {
+                        for (const type of ci.types) {
+                            if (type.startsWith('image/')) {
+                                const blob = await ci.getType(type);
+                                const file = new File([blob], 'pasted-image', { type: blob.type });
+                                await handleFile(file);
+                                return;
+                            }
+                        }
+                    }
+                }
+                alert('Press Ctrl+V to paste an image here.');
+            } catch {
+                alert('Press Ctrl+V to paste an image here.');
+            }
+        });
+
+        // Copy cropped photo to clipboard
+        copyPhotoButton?.addEventListener('click', async () => {
+            try {
+                if (!previewImg?.src) return;
+                const res = await fetch(previewImg.src);
+                const blob = await res.blob();
+                if (navigator.clipboard && window.ClipboardItem) {
+                    await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+                    copyPhotoButton.textContent = 'Copied!';
+                    setTimeout(() => (copyPhotoButton.textContent = 'Copy Photo'), 1200);
+                }
+            } catch (e) {
+                console.warn('Copy failed:', e);
+            }
+        });
 
         // Warm up model load when page becomes idle
         if ('requestIdleCallback' in window) {
@@ -897,25 +1062,73 @@
                     logging: false,
                     backgroundColor: null,
                     onclone: (clonedDoc) => {
-                        // Replace all inputs inside containers with plain text for consistent baselines
+                        // Replace inputs with styled spans so PDF matches screen intention
                         const inputs = clonedDoc.querySelectorAll('.container input');
                         inputs.forEach((inp) => {
                             const span = clonedDoc.createElement('span');
-                            const txt = inp.value && inp.value.trim() !== ''
+                            // Determine if this input lives inside an overlay highlight wrapper
+                            const inOverlay = !!(inp.closest('#p2AccountManagerWrap, #p2WebsiteWrap'));
+                            const hasValue = !!(inp.value && inp.value.trim() !== '');
+                            // For overlay fields, do NOT fall back to placeholder text in PDF
+                            const txt = hasValue
                                 ? inp.value
-                                : (inp.getAttribute('placeholder') || '');
+                                : (inOverlay ? '' : (inp.getAttribute('placeholder') || ''));
                             span.textContent = txt;
-                            // apply robust, generic styles
-                            span.style.fontWeight = 'bold';
-                            span.style.fontSize = '16px';
-                            span.style.color = '#000';
+                            // Base typography from inline styles
+                            const size = inp.style.fontSize || '20px';
+                            const weight = inp.style.fontWeight || 'normal';
+                            span.style.fontSize = size;
+                            span.style.fontWeight = weight;
                             span.style.display = 'inline-block';
                             span.style.lineHeight = '1.1';
                             span.style.verticalAlign = 'baseline';
                             span.style.whiteSpace = 'pre';
+                            // Ensure the text sits above any absolute-positioned highlight spans
+                            span.style.position = 'relative';
+                            span.style.zIndex = '1';
+                            // Copy padding so label/value alignment matches
+                            const cs = clonedDoc.defaultView.getComputedStyle(inp);
+                            span.style.padding = `${cs.paddingTop} ${cs.paddingRight} ${cs.paddingBottom} ${cs.paddingLeft}`;
+                            // Special presentations
+                            if (inp.classList.contains('link-like')) {
+                                span.style.color = '#1976D2';
+                                span.style.textDecoration = 'underline';
+                            } else if (inp.classList.contains('highlight') && !inOverlay) {
+                                // Only highlight when there is actual text
+                                if (txt.trim()) {
+                                    span.style.background = '#ffeb3b';
+                                    span.style.padding = '0 2px';
+                                    span.style.color = '#000';
+                                } else {
+                                    span.style.color = '#000';
+                                }
+                            } else {
+                                span.style.color = inp.style.color || '#000';
+                            }
                             inp.replaceWith(span);
                         });
-                        // Hide any page-only controls marked to ignore
+                        // For overlay highlight fields, mirror text into background span and avoid double highlight
+                        // Handle all overlay highlight wrappers generically
+                        clonedDoc.querySelectorAll('.hl-wrap').forEach(wrap => {
+                            const hl = wrap.querySelector('.hl-bg');
+                            if (!hl) return;
+                            // After input replacement, the only children should be HL and the span
+                            const textSpan = Array.from(wrap.childNodes).find(n => n.nodeType === 1 && !n.classList?.contains('hl-bg'));
+                            const content = textSpan && textSpan.textContent ? textSpan.textContent : '';
+                            if (content.trim()) {
+                                hl.style.display = 'inline';
+                                hl.textContent = content;
+                                if (textSpan && textSpan.style) {
+                                    textSpan.style.background = 'transparent';
+                                    textSpan.style.padding = '0';
+                                    // Keep text visible above the highlight
+                                    textSpan.style.position = 'relative';
+                                    textSpan.style.zIndex = '1';
+                                }
+                            } else {
+                                hl.style.display = 'none';
+                            }
+                        });
                         clonedDoc.querySelectorAll('.hide-on-pdf, .top-actions').forEach(el => el.style.display = 'none');
                     }
                 });
@@ -964,6 +1177,10 @@
             const p2WebsiteInput = document.querySelector('#p2Website');
             if (p2WebsiteInput && !(document.activeElement === p2WebsiteInput && p2WebsiteInput.value)) {
                 p2WebsiteInput.value = website;
+                if (typeof syncWebsiteHighlight === 'function') {
+                    // ensure overlay highlight mirrors new value
+                    setTimeout(() => syncWebsiteHighlight(), 0);
+                }
             }
         }
         document.querySelectorAll('.candidate-info input').forEach(i => i.addEventListener('input', syncP2));
@@ -989,6 +1206,95 @@
                 if (p1Website) p1Website.value = p2WebsiteInputEl.value;
             });
         }
+        // Highlight exactly what is typed for Website using a mirrored background span
+        const p2WebsiteEl = document.getElementById('p2Website');
+        const p2WebsiteHL = document.getElementById('p2WebsiteHL');
+        function syncWebsiteHighlight() {
+            if (!p2WebsiteEl || !p2WebsiteHL) return;
+            const txt = p2WebsiteEl.value || '';
+            // Match HL font metrics to input so widths line up exactly
+            const cs = getComputedStyle(p2WebsiteEl);
+            p2WebsiteHL.style.font = cs.font;
+            p2WebsiteHL.style.letterSpacing = cs.letterSpacing;
+            p2WebsiteHL.style.textTransform = cs.textTransform;
+            p2WebsiteHL.style.lineHeight = cs.lineHeight;
+            p2WebsiteHL.style.padding = `${cs.paddingTop} ${cs.paddingRight} ${cs.paddingBottom} ${cs.paddingLeft}`;
+            p2WebsiteHL.textContent = txt;
+            const show = txt.trim().length > 0;
+            p2WebsiteHL.style.display = show ? 'inline' : 'none';
+            const px = sizeToText(p2WebsiteEl);
+            p2WebsiteEl.style.width = px + 'px';
+        }
+        if (p2WebsiteEl) {
+            p2WebsiteEl.addEventListener('input', syncWebsiteHighlight);
+            syncWebsiteHighlight();
+        }
+        // Delegated highlight sync for any cloned rows (Website or Account Manager)
+        document.addEventListener('input', (e) => {
+            const t = e.target;
+            if (!(t instanceof HTMLInputElement)) return;
+            if (!t.classList.contains('hl-input')) return;
+            const wrap = t.closest('.hl-wrap');
+            const bg = wrap ? wrap.querySelector('.hl-bg') : null;
+            if (!wrap || !bg) return;
+            // Mirror font metrics
+            const cs = getComputedStyle(t);
+            bg.style.font = cs.font;
+            bg.style.letterSpacing = cs.letterSpacing;
+            bg.style.textTransform = cs.textTransform;
+            bg.style.lineHeight = cs.lineHeight;
+            // Set text and visibility
+            bg.textContent = t.value || '';
+            bg.style.display = (t.value || '').trim() ? 'inline' : 'none';
+            // Resize input to text
+            if (!t.classList.contains('hl-fixed')) {
+                const px = sizeToText(t);
+                t.style.width = px + 'px';
+            }
+        });
+        // Highlight exactly what is typed for Account Manager using a mirrored background span
+        const p2AccountManagerEl = document.getElementById('p2AccountManager');
+        const p2AccountManagerHL = document.getElementById('p2AccountManagerHL');
+        const p2AccountManagerWrap = document.getElementById('p2AccountManagerWrap');
+        function sizeToText(inputEl) {
+            // Use a hidden mirror to measure text width precisely with matching metrics
+            const cs = getComputedStyle(inputEl);
+            const mirror = document.createElement('span');
+            mirror.style.position = 'absolute';
+            mirror.style.visibility = 'hidden';
+            mirror.style.whiteSpace = 'pre';
+            mirror.style.font = cs.font;
+            mirror.style.letterSpacing = cs.letterSpacing;
+            mirror.style.textTransform = cs.textTransform;
+            mirror.style.lineHeight = cs.lineHeight;
+            mirror.style.padding = `${cs.paddingTop} ${cs.paddingRight} ${cs.paddingBottom} ${cs.paddingLeft}`;
+            mirror.textContent = inputEl.value || inputEl.placeholder || '';
+            document.body.appendChild(mirror);
+            const w = mirror.getBoundingClientRect().width;
+            document.body.removeChild(mirror);
+            return Math.max(1, Math.ceil(w));
+        }
+        function syncAccountMgrHighlight() {
+            if (!p2AccountManagerEl || !p2AccountManagerHL) return;
+            const txt = p2AccountManagerEl.value || '';
+            // Match HL font metrics to input
+            const cs = getComputedStyle(p2AccountManagerEl);
+            p2AccountManagerHL.style.font = cs.font;
+            p2AccountManagerHL.style.letterSpacing = cs.letterSpacing;
+            p2AccountManagerHL.style.textTransform = cs.textTransform;
+            p2AccountManagerHL.style.lineHeight = cs.lineHeight;
+            // No left padding so highlight starts right after the colon
+            p2AccountManagerHL.style.padding = '0';
+            p2AccountManagerHL.textContent = txt;
+            const show = txt.trim().length > 0;
+            p2AccountManagerHL.style.display = show ? 'inline' : 'none';
+            // Keep fixed width to prevent shifting
+        }
+        if (p2AccountManagerEl) {
+            p2AccountManagerEl.addEventListener('input', syncAccountMgrHighlight);
+            // initialize on load
+            syncAccountMgrHighlight();
+        }
         syncP2();
 
         // Simple pager for screen view
@@ -1007,17 +1313,23 @@
         addRowBtn?.addEventListener('click', () => {
             const tbody = mainTable?.querySelector('tbody');
             if (!tbody) return;
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td style="text-align:center; border:1px solid #000; padding:8px;">
-                    <strong>Member ID:</strong><br>
-                    <input type="text" value="" style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
-                </td>
-                <td style="text-align:center; border:1px solid #000; padding:8px;">
-                    <strong>Website:</strong><br>
-                    <input type="text" value="" style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
-                </td>`;
-            tbody.appendChild(tr);
+            const firstRow = tbody.querySelector('tr');
+            if (!firstRow) return;
+            const clone = firstRow.cloneNode(true);
+            // Clear values and remove duplicate IDs on inputs
+            clone.querySelectorAll('input').forEach(inp => {
+                inp.value = '';
+                if (inp.id) inp.removeAttribute('id');
+            });
+            // Also remove IDs from any highlight wrappers/spans to avoid duplicates
+            clone.querySelectorAll('#p2WebsiteWrap, #p2WebsiteHL').forEach(el => el.removeAttribute('id'));
+            // Also ensure cloned overlay class hooks exist even without IDs
+            clone.querySelectorAll('input').forEach(inp => {
+                if (inp.classList && inp.classList.contains('highlight')) {
+                    inp.classList.add('hl-input');
+                }
+            });
+            tbody.appendChild(clone);
         });
         deleteRowBtn?.addEventListener('click', () => {
             const tbody = mainTable?.querySelector('tbody');
