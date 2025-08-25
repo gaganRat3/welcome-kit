@@ -34,12 +34,13 @@
             width: 210mm;
             height: 297mm;
             margin: 0 auto;
-            /* Inner orange ring + true outer blue border */
+            /* Two inset rings so both show in print/PDF: blue outside, orange inside */
             border: none;
-            /* orange inside */
-            box-shadow: inset 0 0 0 8px #FF6600,
-                /* blue outside the element */
-                0 0 0 4px #1976D2;
+            box-shadow:
+                inset 0 0 0 5px #1976D2,
+                /* OUTER blue band (closest to edge) */
+                inset 0 0 0 14px #FF6600;
+            /* inner orange band */
             padding: 20mm 20mm 0 20mm;
             background: url('back2.jpeg') no-repeat center center;
             background-size: cover;
@@ -58,8 +59,11 @@
             .container {
                 margin: 0;
                 border: none;
-                box-shadow: inset 0 0 0 8px #FF6600,
-                    0 0 0 4px #1976D2;
+                box-shadow:
+                    inset 0 0 0 12px #1976D2,
+                    /* OUTER blue */
+                    inset 0 0 0 6px #FF6600;
+                /* inner orange */
                 width: 210mm;
                 height: 297mm;
                 padding: 20mm 20mm 0 20mm;
@@ -452,12 +456,48 @@
         .p2-note ul {
             margin: 6px 0 0 18px;
         }
+
+        /* Screen-only paging: show one container at a time, but render all for PDF */
+        @media screen {
+            .container {
+                display: none;
+            }
+
+            .container.active {
+                display: block;
+            }
+        }
+
+        body.render-all .container {
+            display: block !important;
+        }
+
+        @media print {
+            .hide-on-pdf {
+                display: none !important;
+            }
+        }
+
+        /* Make Page 2 plain (no background image or decorative rings) */
+        #page2 {
+            background: #fff !important;
+            box-shadow: none !important;
+        }
+
+        @media print {
+            #page2 {
+                background: #fff !important;
+                box-shadow: none !important;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="top-actions" data-html2canvas-ignore="true">
         <button id="downloadPdfBtn" class="download-btn">Download PDF</button>
+        <button id="prevPageBtn" class="download-btn" type="button">Prev Page</button>
+        <button id="nextPageBtn" class="download-btn" type="button">Next Page</button>
         <button id="uploadPhotoButtonTop" class="upload-btn-top" type="button">Upload Photo</button>
     </div>
 
@@ -572,6 +612,103 @@
 
         </div>
 
+    </div>
+
+
+    <!-- Page 2 (embedded) -->
+    <div class="container" id="page2">
+        <div class="header">
+            <img src="img1.png" alt="Bhudev Network Logo" class="main-logo" style="height:70px;margin-top:0;">
+            <div class="sub-logos" style="margin-bottom:20px;gap:60px;">
+                <img src="img2.png" alt="Vivah Logo">
+                <img src="img3.png" alt="NRI Vivah Logo">
+                <img src="img4.jpg" alt="Bhudev Network Logo">
+            </div>
+        </div>
+
+        <div class="p2-wrapper" style="margin: 0 6mm;">
+            <div class="welcome-text" style="text-align:center;">
+                <p>Welcome to Bhudev Network Family,</p>
+                <p>Thank You for Choosing Bhudev Network for Searching your Life partner.</p>
+            </div>
+
+            <div class="hide-on-pdf" style="text-align: right; margin-bottom: 10px;">
+                <button id="addRowBtn"
+                    style="background: #1976D2; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">Add
+                    Row</button>
+                <button id="deleteRowBtn"
+                    style="background: #d61977; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">Delete
+                    Row</button>
+            </div>
+
+            <table class="content-table" id="mainTable"
+                style="width:100%; border-collapse: collapse; margin-bottom: 12px;">
+                <thead>
+                    <tr>
+                        <th colspan="2" style="text-align:center; border:1px solid #000; padding:8px;">
+                            Candidate Name :
+                            <input id="p2CandidateName" type="text" placeholder="Enter candidate name"
+                                style="border:0; padding:4px; width:60%; text-align:center; font-weight:bold;">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center; border:1px solid #000; padding:8px;">
+                            <strong>Member ID:</strong><br>
+                            <input id="p2MembershipId" type="text" placeholder="Enter membership ID"
+                                style="border:0; padding:4px; width:90%; text-align:center;">
+                        </td>
+                        <td style="text-align:center; border:1px solid #000; padding:8px;">
+                            <strong>Website:</strong><br>
+                            <input id="p2Website" type="text" placeholder="Enter website name"
+                                style="border:0; padding:4px; width:90%; text-align:center;">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="info-table" style="width:100%;">
+                <tr>
+                    <td class="label" style="width:160px; font-weight:bold;">Login ID :</td>
+                    <td><input type="text" value="" style="border: 1px solid #ccc; padding: 4px; width: 90%;"></td>
+                </tr>
+                <tr>
+                    <td class="label" style="font-weight:bold;">Account Manager :</td>
+                    <td><input type="text" value="" style="border: 1px solid #ccc; padding: 4px; width: 90%;"></td>
+                </tr>
+                <tr>
+                    <td class="label" style="font-weight:bold;">Password :</td>
+                    <td><input type="text" value="" style="border: 1px solid #ccc; padding: 4px; width: 90%;"></td>
+                </tr>
+
+            </table>
+
+            <div class="footer-section" style="position:absolute; left:8px; right:8px; bottom:8px;">
+                <div class="footer-note">
+                    <ul>
+                        <li>Please Read Backside For Policies, Terms and Conditions and Scope of Services Covered under
+                            Your Membership</li>
+                    </ul>
+                </div>
+                <div class="footer-container" style="display:flex; gap:12px;">
+                    <div class="office-box vadodara-office" style="flex:1;">
+                        <div class="office-header">VADODARA
+                            <hr>
+                        </div>
+                        <div class="office-details">603, Galav Chambers, Dairy Den Circle, Sayajigunj Vadodara-390020
+                        </div>
+                    </div>
+                    <div class="office-box amdavad-office" style="flex:1;">
+                        <div class="office-header">AMDAVAD
+                            <hr>
+                        </div>
+                        <div class="office-details">A-703, 7th Floor, Nar-Naryana Complex, Opp Jalaram Chhaswala, Nr.
+                            Navrangpura Post office, Amdavad-380009</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -732,6 +869,8 @@
         const containerEls = Array.from(document.querySelectorAll('.container'));
         const uploadControls = document.querySelector('.upload-controls');
         const modelBadge = document.getElementById('modelStatus');
+        const nextBtn = document.getElementById('nextPageBtn');
+        const prevBtn = document.getElementById('prevPageBtn');
 
         async function downloadPDF() {
             // Temporarily hide non-document UI
@@ -740,10 +879,16 @@
             if (uploadControls) uploadControls.style.display = 'none';
             if (modelBadge) modelBadge.style.display = 'none';
 
+            // Hide explicit UI controls inside pages
+            const hideEls = Array.from(document.querySelectorAll('.hide-on-pdf'));
+            const hidePrev = hideEls.map(el => el.style.display);
+            hideEls.forEach(el => el.style.display = 'none');
+
             // Sync page 2 with current values
             syncP2();
 
             // Render each A4 container to its own canvas
+            document.body.classList.add('render-all');
             const canvases = [];
             for (const el of containerEls) {
                 const canvas = await html2canvas(el, {
@@ -752,31 +897,36 @@
                     logging: false,
                     backgroundColor: null,
                     onclone: (clonedDoc) => {
-                        // Replace inputs on cloned page 1 for consistent baselines
-                        const inputs = clonedDoc.querySelectorAll('.candidate-info input');
+                        // Replace all inputs inside containers with plain text for consistent baselines
+                        const inputs = clonedDoc.querySelectorAll('.container input');
                         inputs.forEach((inp) => {
                             const span = clonedDoc.createElement('span');
                             const txt = inp.value && inp.value.trim() !== ''
                                 ? inp.value
                                 : (inp.getAttribute('placeholder') || '');
                             span.textContent = txt;
+                            // apply robust, generic styles
                             span.style.fontWeight = 'bold';
-                            span.style.fontSize = '23px';
-                            span.style.color = '#ff1f8f';
+                            span.style.fontSize = '16px';
+                            span.style.color = '#000';
                             span.style.display = 'inline-block';
                             span.style.lineHeight = '1.1';
                             span.style.verticalAlign = 'baseline';
                             span.style.whiteSpace = 'pre';
                             inp.replaceWith(span);
                         });
+                        // Hide any page-only controls marked to ignore
+                        clonedDoc.querySelectorAll('.hide-on-pdf, .top-actions').forEach(el => el.style.display = 'none');
                     }
                 });
                 canvases.push(canvas);
             }
+            document.body.classList.remove('render-all');
 
             // Restore UI
             if (uploadControls) uploadControls.style.display = prevUploadDisplay;
             if (modelBadge) modelBadge.style.display = prevBadgeDisplay;
+            hideEls.forEach((el, i) => el.style.display = hidePrev[i]);
 
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -801,15 +951,78 @@
             const member = document.querySelector('.info-field:nth-child(3) input')?.value || '';
             const website = document.querySelector('.info-field:nth-child(4) input')?.value || '';
             const mobile = document.querySelector('.info-field:nth-child(5) input')?.value || '';
+            const p2NameInput = document.querySelector('#p2CandidateName');
+            if (p2NameInput && !(document.activeElement === p2NameInput && p2NameInput.value)) {
+                p2NameInput.value = name;
+            }
+            const p2MemberInput = document.querySelector('#p2MembershipId');
+            if (p2MemberInput && !(document.activeElement === p2MemberInput && p2MemberInput.value)) {
+                p2MemberInput.value = member;
+            }
             const setText = (sel, val) => { const el = document.querySelector(sel); if (el) el.textContent = val || '—'; };
-            setText('#p2CandidateName', name);
-            setText('#p2MembershipId', member);
             setText('#p2Mobile', mobile);
-            const linkEl = document.querySelector('#p2Website');
-            if (linkEl) { linkEl.textContent = website || '—'; linkEl.href = website ? normalizeURL(website) : '#'; }
+            const p2WebsiteInput = document.querySelector('#p2Website');
+            if (p2WebsiteInput && !(document.activeElement === p2WebsiteInput && p2WebsiteInput.value)) {
+                p2WebsiteInput.value = website;
+            }
         }
         document.querySelectorAll('.candidate-info input').forEach(i => i.addEventListener('input', syncP2));
+        // allow page 2 name input to update page 1 field if edited there
+        const p2NameInputEl = document.getElementById('p2CandidateName');
+        if (p2NameInputEl) {
+            p2NameInputEl.addEventListener('input', () => {
+                const p1Name = document.querySelector('.info-field:nth-child(1) input');
+                if (p1Name) p1Name.value = p2NameInputEl.value;
+            });
+        }
+        const p2MemberInputEl = document.getElementById('p2MembershipId');
+        if (p2MemberInputEl) {
+            p2MemberInputEl.addEventListener('input', () => {
+                const p1Member = document.querySelector('.info-field:nth-child(3) input');
+                if (p1Member) p1Member.value = p2MemberInputEl.value;
+            });
+        }
+        const p2WebsiteInputEl = document.getElementById('p2Website');
+        if (p2WebsiteInputEl) {
+            p2WebsiteInputEl.addEventListener('input', () => {
+                const p1Website = document.querySelector('.info-field:nth-child(4) input');
+                if (p1Website) p1Website.value = p2WebsiteInputEl.value;
+            });
+        }
         syncP2();
+
+        // Simple pager for screen view
+        let activeIndex = 0; // 0-based over containerEls
+        function updateActive() {
+            containerEls.forEach((el, idx) => el.classList.toggle('active', idx === activeIndex));
+        }
+        updateActive();
+        nextBtn?.addEventListener('click', () => { activeIndex = (activeIndex + 1) % containerEls.length; updateActive(); });
+        prevBtn?.addEventListener('click', () => { activeIndex = (activeIndex - 1 + containerEls.length) % containerEls.length; updateActive(); });
+
+        // Page 2 dynamic row controls
+        const addRowBtn = document.getElementById('addRowBtn');
+        const deleteRowBtn = document.getElementById('deleteRowBtn');
+        const mainTable = document.getElementById('mainTable');
+        addRowBtn?.addEventListener('click', () => {
+            const tbody = mainTable?.querySelector('tbody');
+            if (!tbody) return;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="text-align:center; border:1px solid #000; padding:8px;">
+                    <strong>Member ID:</strong><br>
+                    <input type="text" value="" style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                </td>
+                <td style="text-align:center; border:1px solid #000; padding:8px;">
+                    <strong>Website:</strong><br>
+                    <input type="text" value="" style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                </td>`;
+            tbody.appendChild(tr);
+        });
+        deleteRowBtn?.addEventListener('click', () => {
+            const tbody = mainTable?.querySelector('tbody');
+            if (tbody && tbody.rows.length > 1) tbody.deleteRow(tbody.rows.length - 1);
+        });
     </script>
 </body>
 

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhudev Network</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            width: 210mm;
+            height: 297mm;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            background-color: #fff;
+            box-sizing: border-box;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                border: none;
+                box-shadow: none;
+                overflow: hidden;
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 300px;
+            margin-bottom: 10px;
+        }
+
+        .foundation-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #003366;
+        }
+
+        .foundation-subtitle {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .sub-logos {
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .sub-logo {
+            height: 40px;
+        }
+
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .content-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .content-table th,
+        .content-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .content-table th {
+            background-color: #ffffff;
+        }
+
+        .info-table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .info-table td {
+            padding: 5px 0;
+        }
+
+        .info-table .label {
+            font-weight: bold;
+        }
+
+        .footer-section {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            width: calc(100% - 40px);
+        }
+
+        .footer-note {
+            margin-bottom: 20px;
+        }
+
+        .footer-addresses {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .address {
+            width: 48%;
+            background-color: #003366;
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="img1.png" alt="Bhudev Network Logo" class="logo">
+        </div>
+
+        <div class="sub-logos">
+            <img src="img2.png" alt="Vivah Logo" class="sub-logo">
+            <img src="img3.png" alt="NRI Vivah Logo" class="sub-logo">
+            <img src="img4.jpg" alt="Bhudev Network Logo" class="sub-logo">
+        </div>
+
+        <div class="welcome-text">
+            <p>Welcome to Bhudev Network Family,</p>
+            <p>Thank You for Choosing Bhudev Network for Searching your Life partner.</p>
+        </div>
+
+        <div style="text-align: right; margin-bottom: 10px;">
+            <button id="addRowBtn"
+                style="background: #1976D2; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">Add
+                Row</button>
+            <button id="deleteRowBtn"
+                style="background: #d61977; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">Delete
+                Row</button>
+        </div>
+        <table class="content-table" id="mainTable">
+            <thead>
+                <tr>
+                    <th colspan="2" style="text-align: center;">
+                        Candidate Name : <input type="text" value="Dr. Manthan Bhatt"
+                            style="border: 0px solid #e9ecef00; padding: 4px; width: 50%; text-align: center;">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: center;">
+                        <strong>Member ID:</strong><br>
+                        <input type="text" value="24EDAEPD14251"
+                            style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                    </td>
+                    <td style="text-align: center;">
+                        <strong>Website:</strong><br>
+                        <input type="text" value="Nri.Bhudevnetworkvivah.com"
+                            style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        <strong>Member ID:</strong><br>
+                        <input type="text" value="325B90CA12601"
+                            style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                    </td>
+                    <td style="text-align: center;">
+                        <strong>Website:</strong><br>
+                        <input type="text" value="Canada.Bhudevnetworkvivah.com"
+                            style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        <strong>Member ID:</strong><br>
+                        <input type="text" value="F9054C5012531"
+                            style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                    </td>
+                    <td style="text-align: center;">
+                        <strong>Website:</strong><br>
+                        <input type="text" value="Usa.Bhudevnetworkvivah.com"
+                            style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        <strong>Member ID:</strong><br>
+                        <input type="text" value="0096CF4A12442"
+                            style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                    </td>
+                    <td style="text-align: center;">
+                        <strong>Website:</strong><br>
+                        <input type="text" value="Divorce.Bhudevnetworkvivah.com"
+                            style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="info-table">
+            <tr>
+                <td class="label">Login ID :</td>
+                <td><input type="text" value="atulbhatt.in@gmail.com"
+                        style="border: 1px solid #ccc; padding: 4px; width: 90%;"></td>
+            </tr>
+            <tr>
+                <td class="label">Account Manager :</td>
+                <td><input type="text" value="Khushali" style="border: 1px solid #ccc; padding: 4px; width: 90%;"></td>
+            </tr>
+            <tr>
+                <td class="label">Password :</td>
+                <td><input type="text" value="123456789" style="border: 1px solid #ccc; padding: 4px; width: 90%;"></td>
+            </tr>
+        </table>
+
+        <div class="footer-section">
+            <div class="footer-note">
+                <ul>
+                    <li>Please Read Backside For Policies, Terms and Conditions and Scope of Services Covered under Your
+                        Membership</li>
+                </ul>
+            </div>
+
+            <div class="footer-addresses">
+                <div class="address">
+                    <strong>Bhudev Network (Vadodara):</strong> 603, Galav Chambers, Dairy Den Circle, Sayajigunj
+                    Vadodara-390020
+                </div>
+                <div class="address">
+                    <strong>Bhudev Network (Amdavad):</strong> A-703, 7th Floor, Nar-Naryana Complex, Opp Jalaram
+                    Chhaswala,
+                    Nr. Navrangpura, Post office Navrangpura, Amdavad-380009
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const mainTable = document.getElementById('mainTable');
+        const addRowBtn = document.getElementById('addRowBtn');
+        const deleteRowBtn = document.getElementById('deleteRowBtn');
+
+        addRowBtn.onclick = function () {
+            const tbody = mainTable.querySelector('tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td style="text-align: center;">
+                    <strong>Member ID:</strong><br>
+                    <input type="text" value="" style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                </td>
+                <td style="text-align: center;">
+                    <strong>Website:</strong><br>
+                    <input type="text" value="" style="border: 0px solid #ccc; padding: 4px; width: 90%; text-align: center;">
+                </td>
+            `;
+            tbody.appendChild(newRow);
+        };
+
+        deleteRowBtn.onclick = function () {
+            const tbody = mainTable.querySelector('tbody');
+            if (tbody.rows.length > 1) {
+                tbody.deleteRow(tbody.rows.length - 1);
+            }
+        };
+    </script>
+</body>
+
+</html>
