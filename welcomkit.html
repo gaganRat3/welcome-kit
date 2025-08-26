@@ -21,6 +21,14 @@
             --footerOrnamentWidth: 500px;
             /* control ornament width only */
             /* reduced office box bottom padding */
+            /* Page 2 info-table per-field spacing */
+            --login-margin: 0 0 0 6px;
+            --login-padding: 0 6px;
+            --am-margin: 0 0 0 6px;
+            --am-padding: 0;
+            /* start right after colon */
+            --pass-margin: 0 0 0 6px;
+            --pass-padding: 0 6px;
         }
 
         body {
@@ -536,9 +544,55 @@
             margin-right: 0;
         }
 
+        /* Per-row grid overrides: control label width and gap separately per row */
+        .info-table .row-login>td {
+            grid-template-columns: 232px auto;
+            column-gap: 6px;
+        }
+
+        .info-table .row-account-manager>td {
+            grid-template-columns: 322px auto;
+            column-gap: 6px;
+        }
+
+        .info-table .row-password>td {
+            grid-template-columns: 241px auto;
+            column-gap: 6px;
+        }
+
         /* Remove left padding in value inputs so text starts right after the colon */
         .info-table .p2-inline-input {
             padding-left: 0 !important;
+        }
+
+        /* Separate styles for Login, Account Manager, and Password */
+        .info-table .row-login .login-id-input {
+
+            font-weight: 700;
+            margin: var(--login-margin);
+            padding: var(--login-padding);
+        }
+
+        .info-table .row-account-manager .account-manager-input {
+            color: #000 !important;
+            font-weight: 600;
+            padding: var(--am-padding);
+        }
+
+        .info-table .row-account-manager .account-manager-hl {
+            background: #ffeb3b !important;
+        }
+
+        .info-table .row-account-manager .account-manager-wrap {
+            margin: var(--am-margin);
+        }
+
+        .info-table .row-password .password-input {
+            color: #000;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin: var(--pass-margin);
+            padding: var(--pass-padding);
         }
 
         /* Screen-only paging: show one container at a time, but render all for PDF */
@@ -863,30 +917,31 @@
         </table>
 
         <table class="info-table" style="width:625px; border-collapse:collapse;">
-            <tr>
+            <tr class="row-login">
                 <td style="text-align:center; border:1px solid #000; padding:8px; font-size:20px;">
                     <strong>Login ID :</strong>
-                    <input id="p2LoginId" class="p2-inline-input link-like" type="text" placeholder="email@example.com"
-                        style="border:0; padding:0 6px; width:350px; font-size:20px; color:#1976D2; ">
+                    <input id="p2LoginId" class="p2-inline-input link-like login-id-input" type="text"
+                        placeholder="email@example.com" style="border:0; padding:0 6px; width:350px; font-size:20px; ">
                 </td>
             </tr>
-            <tr>
+            <tr class="row-account-manager">
                 <td style="text-align:center; border:1px solid #000; padding:8px; font-size:20px;">
                     <strong>Account Manager :</strong>
-                    <span id="p2AccountManagerWrap" class="hl-wrap"
+                    <span id="p2AccountManagerWrap" class="hl-wrap account-manager-wrap"
                         style="position:relative; display:inline-block; vertical-align:baseline;">
-                        <span id="p2AccountManagerHL" class="hl-bg" aria-hidden="true"
+                        <span id="p2AccountManagerHL" class="hl-bg account-manager-hl" aria-hidden="true"
                             style="position:absolute; left:0; top:50%; transform:translateY(-50%); background:#ffeb3b; padding:0 2px; white-space:pre; pointer-events:none; display:none; line-height:inherit; color:transparent;"></span>
-                        <input id="p2AccountManager" class="p2-inline-input highlight hl-input hl-fixed" type="text"
+                        <input id="p2AccountManager"
+                            class="p2-inline-input highlight hl-input hl-fixed account-manager-input" type="text"
                             placeholder="Name"
                             style="border:0; padding:0; width:220px; font-size:20px; line-height:1.2; background:transparent; position:relative; z-index:1; outline:none;">
                     </span>
                 </td>
             </tr>
-            <tr>
+            <tr class="row-password">
                 <td style="text-align:center; border:1px solid #000; padding:8px; font-size:20px;">
                     <strong>Password :</strong>
-                    <input id="p2Password" class="p2-inline-input" type="text" value="123456789" readonly
+                    <input id="p2Password" class="p2-inline-input password-input" type="text" value="123456789" readonly
                         aria-readonly="true" style="border:0; padding:0 6px; width:auto; font-size:20px;">
                 </td>
             </tr>
