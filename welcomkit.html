@@ -792,7 +792,7 @@
                 </div>
                 <div class="info-field">
                     <label>Website Name :</label>
-                    <input type="text" placeholder="Enter website name"
+                    <input type="text" value=".bhudevnetworkvivah.com" placeholder="Enter website name"
                         style="font-weight:bold;flex:1;border:none;background:transparent;font-size:20px;color:#ff1f8f;outline:none;">
                 </div>
                 <div class="info-field">
@@ -917,7 +917,7 @@
                             <span id="p2WebsiteHL" class="hl-bg" aria-hidden="true"
                                 style="position:absolute; left:50%; top:50%; transform:translate(-50%, -50%); background:#ffeb3b; padding:0 2px; white-space:pre; pointer-events:none; display:none; line-height:inherit; color:transparent;"></span>
                             <input id="p2Website" class="p2-inline-input highlight hl-input" type="text"
-                                placeholder="Enter website name"
+                                value=".bhudevnetworkvivah.com" placeholder="Enter website name"
                                 style="border:0; padding:0 2px; width:1ch; font-size:23px; line-height:1.05; background:transparent; position:relative; z-index:1; text-align:center; outline:none; margin:0;">
                         </span>
                     </td>
@@ -1313,6 +1313,7 @@
         const modelBadge = document.getElementById('modelStatus');
         const nextBtn = document.getElementById('nextPageBtn');
         const prevBtn = document.getElementById('prevPageBtn');
+        const DEFAULT_P2_WEBSITE = '.bhudevnetworkvivah.com';
 
         async function downloadPDF() {
             // Temporarily hide non-document UI
@@ -1452,11 +1453,19 @@
             const setText = (sel, val) => { const el = document.querySelector(sel); if (el) el.textContent = val || '—'; };
             setText('#p2Mobile', mobile);
             const p2WebsiteInput = document.querySelector('#p2Website');
-            if (p2WebsiteInput && !(document.activeElement === p2WebsiteInput && p2WebsiteInput.value)) {
-                p2WebsiteInput.value = website;
-                if (typeof syncWebsiteHighlight === 'function') {
-                    // ensure overlay highlight mirrors new value
-                    setTimeout(() => syncWebsiteHighlight(), 0);
+            if (p2WebsiteInput) {
+                const isFocused = document.activeElement === p2WebsiteInput;
+                if (!isFocused) {
+                    if (website && website.trim()) {
+                        // Page 1 has a value; mirror it
+                        p2WebsiteInput.value = website;
+                    } else if (!p2WebsiteInput.value || !p2WebsiteInput.value.trim()) {
+                        // Keep or set default only when empty
+                        p2WebsiteInput.value = DEFAULT_P2_WEBSITE;
+                    }
+                    if (typeof syncWebsiteHighlight === 'function') {
+                        setTimeout(() => syncWebsiteHighlight(), 0);
+                    }
                 }
             }
         }
